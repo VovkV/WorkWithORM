@@ -14,7 +14,7 @@ namespace CDM.Tasks.Data.Models
         public TaskData() { }
 
         [Column("task_id")]
-        //[Identifier(IdentifierStrategy.DbGenerated)]
+        [Identifier(IdentifierStrategy.Assigned)]
         public int Id { get; set; }
 
         [Column("task_text")]

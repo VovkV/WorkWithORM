@@ -75,8 +75,18 @@ namespace CDM.Tasks.Implementation
                     var line = session.Single<TaskData>(task.Id);
 
                     if (line == null)
-                    { 
-                        session.Insert(task);
+                    {
+                        SqlQuery query;
+                        if (task.Id == 0)
+                            query = new SqlQuery("SET IDENTITY_INSERT dbo.Tasks OFF; " +
+                                                 "Insert Into Tasks (task_text) Values (@taskText)",
+                                task.Text);
+                        else
+                            query = new SqlQuery("SET IDENTITY_INSERT dbo.Tasks ON; " +
+                                                 "Insert Into Tasks (task_id,task_text) Values (@taskId,@taskText)",
+                                task.Id, task.Text);
+
+                        session.Fetch<dynamic>(query);
                     }
                     else
                     {
@@ -85,7 +95,7 @@ namespace CDM.Tasks.Implementation
                     }
                     return true;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     return false;
                 }

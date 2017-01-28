@@ -21,7 +21,7 @@ namespace CDM.Tasks.Tests
         public AdoNetRepositoryTest()
         {
             _testText = "TEST";
-            _sut = new AdoNetTasksRepository();
+            _sut = new MicroLiteTasksRepository();
         }
         
         
@@ -30,7 +30,7 @@ namespace CDM.Tasks.Tests
         {
             int testId = GetRand();
             _sut.UpsertTask(new TaskData(testId, _testText));
-       
+
             var testTask = _sut.GetTaskById(testId);
 
             Assert.NotEqual(null,testTask);
