@@ -21,7 +21,7 @@ namespace CDM.Tasks.Tests
         public AdoNetRepositoryTest()
         {
             _testText = "TEST";
-            _sut = new MicroLiteTasksRepository();
+            _sut = new AdoNetTasksRepository();
         }
         
         
