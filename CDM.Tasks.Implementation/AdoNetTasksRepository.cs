@@ -99,6 +99,9 @@ namespace CDM.Tasks.Implementation
             {
                 try
                 {
+                    if (task.Id < 0)
+                        throw new Exception("Negative ID");
+
                     var cmd = new SqlCommand("Select count(*) From Tasks Where task_id=@taskId",
                         connection);
                     cmd.Parameters.AddWithValue("@taskId", task.Id);
@@ -124,7 +127,7 @@ namespace CDM.Tasks.Implementation
                     }
                     return true;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     return false;
                 }

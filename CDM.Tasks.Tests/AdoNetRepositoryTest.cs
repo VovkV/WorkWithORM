@@ -99,5 +99,17 @@ namespace CDM.Tasks.Tests
             Assert.Equal(true, testResultTrue);
             Assert.Equal(false, testResultFalse);
         }
+
+        [Fact]
+        public void TestInsertNegative()
+        {
+            int testId = -GetRand();
+
+            var testResult = _sut.UpsertTask(new TaskData(testId, _testText));
+            var testTask = _sut.GetTaskById(testId);
+
+            Assert.Equal(null,testTask);
+            Assert.Equal(false, testResult);
+        }
     }
 }
