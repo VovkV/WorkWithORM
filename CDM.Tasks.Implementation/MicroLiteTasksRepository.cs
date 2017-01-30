@@ -72,8 +72,8 @@ namespace CDM.Tasks.Implementation
             {
                 try
                 {
-                    if (task.Id < 0)
-                        throw new Exception("Negative ID");
+                    if (task.Id < 0 || task.Text==null)
+                        return false;
 
                     var line = session.Single<TaskData>(task.Id);
 

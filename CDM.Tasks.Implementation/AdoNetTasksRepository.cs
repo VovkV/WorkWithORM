@@ -100,7 +100,7 @@ namespace CDM.Tasks.Implementation
                 try
                 {
                     if (task.Id < 0)
-                        throw new Exception("Negative ID");
+                        return false;
 
                     var cmd = new SqlCommand("Select count(*) From Tasks Where task_id=@taskId",
                         connection);

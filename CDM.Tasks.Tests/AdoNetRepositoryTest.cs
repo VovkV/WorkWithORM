@@ -14,7 +14,7 @@ namespace CDM.Tasks.Tests
     {
         private ITasksRepository _sut;
         private string _testText;
-        private int GetRand()
+        private int _GetRand()
         {
             return 100000 + new Random().Next(100000, 200000);
         }
@@ -28,7 +28,7 @@ namespace CDM.Tasks.Tests
         [Fact]
         public void TestInsertRecord()
         {
-            int testId = GetRand();
+            int testId = _GetRand();
             _sut.UpsertTask(new TaskData(testId, _testText));
 
             var testTask = _sut.GetTaskById(testId);
@@ -43,7 +43,7 @@ namespace CDM.Tasks.Tests
         [Fact]
         public void TestDeleteTask()
         {
-            int testId = GetRand();
+            int testId = _GetRand();
             _sut.UpsertTask(new TaskData(testId, _testText));
 
             bool testResultTrue = _sut.DeleteTaskById(testId);
@@ -59,7 +59,7 @@ namespace CDM.Tasks.Tests
         [Fact]
         public void TestDoubleInsert()
         {
-            int taskId = GetRand();
+            int taskId = _GetRand();
             _sut.UpsertTask(new TaskData(taskId, "FirstInsert"));
             _sut.UpsertTask(new TaskData(taskId, "SecondInsert"));
 
@@ -77,7 +77,7 @@ namespace CDM.Tasks.Tests
         {
             List<TaskData> testList = new List<TaskData>();
 
-            int rand = GetRand();
+            int rand = _GetRand();
 
             for (int i = 0; i < 1000; i++)
             {
@@ -103,13 +103,27 @@ namespace CDM.Tasks.Tests
         [Fact]
         public void TestInsertNegative()
         {
-            int testId = -GetRand();
+            int testId = -_GetRand();
 
             var testResult = _sut.UpsertTask(new TaskData(testId, _testText));
             var testTask = _sut.GetTaskById(testId);
 
             Assert.Equal(null,testTask);
             Assert.Equal(false, testResult);
+        }
+
+        [Fact]
+        public void TestInsertNullArgument()
+        {
+            var task = new TaskData();
+            task.Id = _GetRand();
+
+            int countBefore = _sut.GetAllTasks().Count;
+            var testResult = _sut.UpsertTask(task);
+            int countAfter = _sut.GetAllTasks().Count;
+
+            Assert.Equal(false, testResult);
+            Assert.Equal(countBefore,countAfter);
         }
     }
 }
