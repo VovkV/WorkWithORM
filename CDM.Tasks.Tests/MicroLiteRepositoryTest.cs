@@ -10,21 +10,21 @@ using Xunit;
 
 namespace CDM.Tasks.Tests
 {
-    public class AdoNetRepositoryTest
+    public class MicroLiteRepositoryTest
     {
-        private AdoNetTasksRepository _sut;
+        private MicroLiteTasksRepository _sut;
         private string _testText;
         private int _GetRand()
         {
             return 100000 + new Random().Next(100000, 200000);
         }
-        public AdoNetRepositoryTest()
+        public MicroLiteRepositoryTest()
         {
             _testText = "TEST";
-            _sut = new AdoNetTasksRepository();
+            _sut = new MicroLiteTasksRepository();
         }
-        
-        
+
+
         [Fact]
         public void TestInsertRecord()
         {
@@ -33,9 +33,9 @@ namespace CDM.Tasks.Tests
 
             var testTask = _sut.GetTaskById(testId);
 
-            Assert.NotEqual(null,testTask);
-            Assert.Equal(testId,testTask.Id);
-            Assert.Equal(_testText,testTask.Text);
+            Assert.NotEqual(null, testTask);
+            Assert.Equal(testId, testTask.Id);
+            Assert.Equal(_testText, testTask.Text);
 
             _sut.DeleteTaskById(testId);
         }
@@ -51,9 +51,9 @@ namespace CDM.Tasks.Tests
 
             var testTask = _sut.GetTaskById(testId);
 
-            Assert.Equal(null,testTask);
-            Assert.Equal(true,testResultTrue);
-            Assert.Equal(false,testResultFalse);
+            Assert.Equal(null, testTask);
+            Assert.Equal(true, testResultTrue);
+            Assert.Equal(false, testResultFalse);
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace CDM.Tasks.Tests
 
             for (int i = 0; i < 1000; i++)
             {
-                TaskData task = new TaskData(rand++,"DeleteTasks");
+                TaskData task = new TaskData(rand++, "DeleteTasks");
 
                 testList.Add(task);
 
@@ -108,7 +108,7 @@ namespace CDM.Tasks.Tests
             var testResult = _sut.UpsertTask(new TaskData(testId, _testText));
             var testTask = _sut.GetTaskById(testId);
 
-            Assert.Equal(null,testTask);
+            Assert.Equal(null, testTask);
             Assert.Equal(false, testResult);
         }
 
@@ -123,7 +123,7 @@ namespace CDM.Tasks.Tests
             int countAfter = _sut.GetAllTasks().Count;
 
             Assert.Equal(false, testResult);
-            Assert.Equal(countBefore,countAfter);
+            Assert.Equal(countBefore, countAfter);
         }
     }
 }
