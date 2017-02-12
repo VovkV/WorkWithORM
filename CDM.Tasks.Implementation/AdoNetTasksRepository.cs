@@ -63,7 +63,7 @@ namespace CDM.Tasks.Implementation
             return taskData;
         }
 
-        public TaskData GetTasksByUser(TaskUser user)
+        public List<TaskData> GetTasksByUserGuid(Guid id)
         {
             throw new NotImplementedException();
         }

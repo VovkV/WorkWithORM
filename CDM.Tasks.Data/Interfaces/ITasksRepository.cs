@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CDM.Tasks.Data.Models;
 
 namespace CDM.Tasks.Data.Interfaces
@@ -9,7 +10,7 @@ namespace CDM.Tasks.Data.Interfaces
 
             TaskData GetTaskById(int id);
 
-            TaskData GetTasksByUser(TaskUser user);
+            List<TaskData> GetTasksByUserGuid(Guid id);
 
             bool DeleteTasks(List<TaskData> tasks);
 

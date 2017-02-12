@@ -1,23 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CDM.Tasks.Data.Interfaces;
 using CDM.Tasks.Data.Models;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace CDM.Tasks.Implementation
 {
-    class MongoTasksRepository : ITasksRepository
+    public class MongoTasksRepository : ITasksRepository
     {
+        private IMongoCollection<TaskData> _collection;
+        public MongoTasksRepository()
+        {
+            var client = new MongoClient("mongodb://localhost:27017");
+            var database = client.GetDatabase("test");
+            _collection = database.GetCollection<TaskData>("Task");
+        }
+        #region
         public List<TaskData> GetAllTasks()
         {
-            throw new NotImplementedException();
+            var result = new List<TaskData>();
+
+            var docs = _collection;
+            foreach (var doc in docs)
+            {
+                result.Add(new TaskData {Id = doc.});
+            }
+            return null;
         }
 
         public TaskData GetTaskById(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = new List<TaskData>();
+                var filter = Builders<BsonDocument>.Filter.Eq("id", id.ToString());
+                var docs = _collection.Find<TaskData>(filter).ToList();
+
+                if (docs.Count!=1)
+                    throw new Exception("more then one with this ID");
+
+                var doc = docs.FirstOrDefault();
+
+                return new TaskData();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
         }
 
-        public TaskData GetTasksByUser(TaskUser user)
+        public List<TaskData> GetTasksByUserGuid(Guid id)
         {
             throw new NotImplementedException();
         }
@@ -36,5 +72,6 @@ namespace CDM.Tasks.Implementation
         {
             throw new NotImplementedException();
         }
+        #endregion
     }
 }

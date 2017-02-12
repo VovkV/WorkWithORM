@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using CDM.Tasks.Data.Interfaces;
@@ -14,21 +15,23 @@ namespace CDM.Tasks.Tests
     {
         private AdoNetTasksRepository _sut;
         private string _testText;
-        private int _GetRand()
-        {
-            return 100000 + new Random().Next(100000, 200000);
-        }
+        private Random _testId;
+        private int _min;
+        private int _max;
         public AdoNetRepositoryTest()
         {
+            _testId = new Random();
             _testText = "TEST";
             _sut = new AdoNetTasksRepository();
+            _min = 10000;
+            _max = 20000;
         }
         
         
         [Fact]
         public void TestInsertRecord()
         {
-            int testId = _GetRand();
+            int testId = _testId.Next(_min,_max);
             _sut.UpsertTask(new TaskData(testId, _testText));
 
             var testTask = _sut.GetTaskById(testId);
@@ -43,7 +46,7 @@ namespace CDM.Tasks.Tests
         [Fact]
         public void TestDeleteTask()
         {
-            int testId = _GetRand();
+            int testId = _testId.Next(_min, _max);
             _sut.UpsertTask(new TaskData(testId, _testText));
 
             bool testResultTrue = _sut.DeleteTaskById(testId);
@@ -59,7 +62,7 @@ namespace CDM.Tasks.Tests
         [Fact]
         public void TestDoubleInsert()
         {
-            int taskId = _GetRand();
+            int taskId = _testId.Next(_min, _max);
             _sut.UpsertTask(new TaskData(taskId, "FirstInsert"));
             _sut.UpsertTask(new TaskData(taskId, "SecondInsert"));
 
@@ -77,9 +80,9 @@ namespace CDM.Tasks.Tests
         {
             List<TaskData> testList = new List<TaskData>();
 
-            int rand = _GetRand();
+            int rand = _testId.Next(_min, _max);
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 2; i++)
             {
                 TaskData task = new TaskData(rand++,"DeleteTasks");
 
@@ -103,7 +106,7 @@ namespace CDM.Tasks.Tests
         [Fact]
         public void TestInsertNegative()
         {
-            int testId = -_GetRand();
+            int testId = -_testId.Next(_min, _max);
 
             var testResult = _sut.UpsertTask(new TaskData(testId, _testText));
             var testTask = _sut.GetTaskById(testId);
@@ -116,14 +119,13 @@ namespace CDM.Tasks.Tests
         public void TestInsertNullArgument()
         {
             var task = new TaskData();
-            task.Id = _GetRand();
+            task.Id = _testId.Next(_min, _max);
 
-            int countBefore = _sut.GetAllTasks().Count;
             var testResult = _sut.UpsertTask(task);
-            int countAfter = _sut.GetAllTasks().Count;
+            var testTask = _sut.GetTaskById(task.Id);
 
             Assert.Equal(false, testResult);
-            Assert.Equal(countBefore,countAfter);
+            Assert.Equal(null,testTask);
         }
     }
 }
