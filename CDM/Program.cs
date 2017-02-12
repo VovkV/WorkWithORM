@@ -14,7 +14,13 @@ namespace CDM
         static void Main(string[] args)
         {
             var test = new MongoTasksRepository();
-            test.GetAllTasks();
+            //var t = test.UpsertTask(new TaskData(3, "t"));
+            //test.UpsertTask(new TaskData(4, "t"));
+            var d = test.DeleteTasks(new List<TaskData>()
+            {
+                new TaskData(3, "t"),
+                new TaskData(4, "t")
+            });
         }
     }
 }
